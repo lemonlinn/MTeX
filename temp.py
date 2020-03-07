@@ -6,12 +6,12 @@ Spyder Editor
 
 import pandas as pd
 import os
-#import matplotlib.pyplot as plt
-import matplotlib.image as img
+import matplotlib.pyplot as plt
+#import matplotlib.image as img
 import numpy as np
 from PIL import Image
 from sklearn.datasets import load_digits
-#import scipy.io as sio
+import seaborn as sns; sns.set()
 import cv2 as cv
 import math
 
@@ -21,7 +21,6 @@ class MTeX(object):
     def get_img(self, in_path, out_path):
         in_path = os.path.abspath(in_path)
         the_dirs = os.listdir(in_path)
-        the_df_out = pd.DataFrame()
         out_files = os.listdir(out_path)
         for in_name, out_name in zip(the_dirs, out_files):
             the_filenames = os.listdir(in_path + "/" + in_name)
@@ -29,6 +28,14 @@ class MTeX(object):
                 img = Image.open(in_path + '/' + in_name + '/' + word)
                 img = img.resize((32,32))
                 img.save(out_path + "/" + out_name + "/" + word)
+                
+    def contour_resize(self, in_path, out_path):
+        in_path = os.path.abspath(in_path)
+        the_dirs = os.listdir(in_path)
+        for word in the_dirs:
+            img = Image.open(in_path + '/' + word)
+            img = img.resize((32,32))
+            img.save(out_path + "/" + word)
     
     def fetch_df(self, the_path_in):
         the_path_in = os.path.abspath(the_path_in)
@@ -37,7 +44,8 @@ class MTeX(object):
         for dir_name in the_dirs:
             the_filenames = os.listdir(the_path_in + "/" + dir_name)
             for word in the_filenames[0:100]:
-                f = np.array(img.imread(the_path_in + '/' + dir_name + '/' + word))
+                f = np.array(cv.imread(the_path_in + '/' + dir_name + '/' + word))
+                f = cv.cvtColor(f, cv.COLOR_BGR2GRAY)
                 datacol = pd.DataFrame([[self.chonkify(f)]], columns=['data'])
                 datacol['target'] = dir_name
                 the_df_out = the_df_out.append(datacol, ignore_index=True)
@@ -54,6 +62,20 @@ class MTeX(object):
 
         test = pd.DataFrame.from_dict({"target":digits.target, "data":empty_col})
         the_df_out = pd.concat([test, the_df_out], sort = True, ignore_index = True)
+        return(the_df_out)
+    
+    def fetch_contour(self, the_path_in):
+        the_path_in = os.path.abspath(the_path_in)
+        the_dirs = os.listdir(the_path_in)
+        #the_df_out = pd.DataFrame()
+        the_df_out = []
+        for word in the_dirs:
+            f = np.array(cv.imread(the_path_in + '/' + word))
+            f = cv.cvtColor(f, cv.COLOR_BGR2GRAY)
+            #temp_col = pd.DataFrame([[self.chonkify(f)]], columns=['data'])
+            #the_df_out = the_df_out.append(temp_col, ignore_index = True)
+            the_df_out.append(self.chonkify(f))
+            
         return(the_df_out)
     
     def chonkify(self, tmp):
@@ -79,7 +101,7 @@ class MTeX(object):
 
         return(temp)
     
-    def prepro(self, img_file):
+    def prepro(self, img_file, folder):
         img = cv.imread(img_file) 
         threshold = 100
 
@@ -88,6 +110,7 @@ class MTeX(object):
 
         canny_output = cv.Canny(src_gray, threshold, threshold * 2)
         contours0, hierarchy = cv.findContours(canny_output, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+        #contours0, hierarchy = cv.findContours(canny_output, cv.RETR_CCOMP, cv.CHAIN_APPROX_SIMPLE)
         contours = [cv.approxPolyDP(cnt, 3, True) for cnt in contours0]
 
         for i in range(len(contours)):
@@ -97,7 +120,7 @@ class MTeX(object):
                 cv.drawContours(clone, contours, i, (0,0,0), cv.FILLED)
                 [x, y, w, h] = cv.boundingRect(contours[i])
                 crop_img = clone[int(math.floor(y-h*0.5)):y+h*2, int(math.floor(x-w*0.5)):x+w*2]
-                cv.imwrite("./contours/contour{}.jpg".format(i), crop_img)
+                cv.imwrite("./{}/contour{}.jpg".format(folder, i), crop_img)
 
         cv.waitKey(0)
         
@@ -116,8 +139,6 @@ data_dict = data.to_dict()
 
 data.to_csv(r"C:\Users\swagj\Documents\GitHub\MTeX\SD_Data.csv")
 
-print(type(data.data[0]), type(data.data[2000]), type(data.data[0][0]), type(data.data[2000][0]))
-
 #%%
 
 from sklearn.ensemble import RandomForestClassifier
@@ -135,71 +156,38 @@ ypred = model.predict(Xtest)
 print(metrics.classification_report(ypred, ytest))
 
 #%%
-import matplotlib.image as img
-from scipy.ndimage import sobel
-import numpy as np
 
-user_input = img.imread(r'C:/Users/swagj/Documents/GitHub/MTeX/IMG_0151.JPG')
+param_grid = {"max_depth": [10, 50, 100],
+              "n_estimators": [16, 32, 64],
+              "random_state": [1234]}
 
-sx = sobel(user_input, axis=0, mode='constant')
-sy = sobel(user_input, axis=1, mode='constant')
-sob = np.hypot(sx, sy)
+grid = GridSearchCV(RandomForestClassifier(), param_grid=param_grid, cv=10)
+
+grid.fit(Xtrain, ytrain)
+
+print("best mean cross-validation score: {:.3f}".format(grid.best_score_))
+print("best parameters: {}".format(grid.best_params_))
+print("test-set score (accuracy): {:.3f}".format(grid.score(Xtest, ytest)))
+
+modelGrid = RandomForestClassifier(**grid.best_params_).fit(Xtrain, ytrain)
+
+#%%
+
+mat = confusion_matrix(ytest, ypred)
+hm = sns.heatmap(mat.T, square=True, annot=True, fmt='d', cbar=False)
+plt.xlabel('true label')
+plt.ylabel('predicted label');
+
+plt.show(block = False)
+hm.get_figure().savefig(r"C:\Users\swagj\Documents\GitHub\MTeX\heatmap.png")
 
 #%%
 
-import cv2
-import numpy as np
+MTeX.prepro(r"C:\Users\swagj\Documents\GitHub\MTeX\IMG_0154.JPG", folder = "test_contour")
 
-# load image
-img = cv2.imread(r'C:/Users/swagj/Documents/GitHub/MTeX/IMG_0151.JPG') 
-rsz_img = cv2.resize(img, None, fx=0.25, fy=0.25) # resize since image is huge
-gray = cv2.cvtColor(rsz_img, cv2.COLOR_BGR2GRAY) # convert to grayscale
+MTeX.contour_resize("C:/Users/swagj/Documents/GitHub/MTeX/test_contour/", "C:/Users/swagj/Documents/GitHub/MTeX/resize_contour/")
 
-# threshold to get just the signature
-retval, thresh_gray = cv2.threshold(gray, thresh=100, maxval=255, type=cv2.THRESH_BINARY)
-
-# find where the signature is and make a cropped region
-points = np.argwhere(thresh_gray==0) # find where the black pixels are
-points = np.fliplr(points) # store them in x,y coordinates instead of row,col indices
-x, y, w, h = cv2.boundingRect(points) # create a rectangle around those points
-x, y, w, h = x-10, y-10, w+20, h+20 # make the box a little bigger
-crop = gray[y:y+h, x:x+w] # create a cropped region of the gray image
-
-# get the thresholded crop
-retval, thresh_crop = cv2.threshold(crop, thresh=200, maxval=255, type=cv2.THRESH_BINARY)
-
-# display
-cv2.imshow("Cropped and thresholded image", thresh_crop) 
-cv2.waitKey(0)
+contour_df = MTeX.fetch_contour(r'C:\Users\swagj\Documents\GitHub\MTeX\resize_contour')
 
 #%%
-import cv2 as cv
-import numpy as np
-import matplotlib.image as img
-import math
-
-img = cv.imread(r'C:/Users/swagj/Documents/GitHub/MTeX/IMG_0151.JPG') 
-threshold = 100
-
-src_gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-src_gray = cv.blur(src_gray, (3,3))
-
-canny_output = cv.Canny(src_gray, threshold, threshold * 2)
-contours0, hierarchy = cv.findContours(canny_output, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-contours = [cv.approxPolyDP(cnt, 3, True) for cnt in contours0]
-
-drawing = np.zeros((canny_output.shape[0], canny_output.shape[1], 3), dtype=np.uint8)
-
-for i in range(len(contours)):
-    clone = np.zeros((img.shape[0], img.shape[1], 3), dtype = np.uint8)
-    clone.fill(255)
-    if cv.contourArea(contours[i]) > 200:
-        cv.drawContours(clone, contours, i, (0,0,0), cv.FILLED)
-        [x, y, w, h] = cv.boundingRect(contours[i])
-        #cv.rectangle(clone,(int(math.floor(x-w*0.5)),int(math.floor(y-h*0.5))),(x+w*2,y+h*2), (255,0,0), 2)
-        crop_img = clone[int(math.floor(y-h*0.5)):y+h*2, int(math.floor(x-w*0.5)):x+w*2]
-        cv.imwrite("./contours/contour{}.jpg".format(i), crop_img)
-
-#cv.imshow('Contours', drawing)
-
-cv.waitKey()
+print(modelGrid.predict(contour_df))
