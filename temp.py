@@ -12,7 +12,7 @@ import matplotlib.image as img
 import numpy as np
 from PIL import Image
 from sklearn.datasets import load_digits
-from scipy.io import loadmat
+import scipy.io as sio
 
 class MTeX(object):
     
