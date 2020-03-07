@@ -2,7 +2,6 @@
 """
 Spyder Editor
 
-This is a temporary script file.
 """
 
 import pandas as pd
@@ -111,4 +110,3 @@ ypred = model.predict(Xtest)
 print(metrics.classification_report(ypred, ytest))
 
 #%%
-
