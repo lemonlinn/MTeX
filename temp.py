@@ -10,6 +10,8 @@ import os
 import matplotlib.image as img
 import numpy as np
 from PIL import Image
+from sklearn.datasets import load_digits
+import scipy.io as sio
 
 class MTeX(object):
     
@@ -34,9 +36,21 @@ class MTeX(object):
             for word in the_filenames[0:100]:
                 f = np.array(img.imread(the_path_in + '/' + dir_name + '/' + word))
                 datacol = pd.DataFrame([[self.chonkify(f)]], columns=['data'])
-                datacol['label'] = dir_name
+                datacol['target'] = dir_name
                 the_df_out = the_df_out.append(datacol, ignore_index=True)
             
+        digits = load_digits()
+        empty_col = np.empty(len(digits.target), dtype=np.object)
+        for i in range(len(digits.target)):
+            empty_col[i] = digits.data[i]
+        
+        for x,d in enumerate(empty_col):
+            empty_col[x] = d.tolist()
+            for y in range(len(d)):
+                d[y] = int(d[y])
+
+        test = pd.DataFrame.from_dict({"target":digits.target, "data":empty_col})
+        the_df_out = pd.concat([test, the_df_out], sort = True, ignore_index = True)
         return(the_df_out)
     
     def chonkify(self, tmp):
@@ -61,7 +75,7 @@ class MTeX(object):
             temp.append(sum(summer))
 
         return(temp)
-
+        
 #%%
 MTeX = MTeX()
 
@@ -69,6 +83,30 @@ MTeX = MTeX()
 
 MTeX.get_img("C:/Users/swagj/Documents/GitHub/MTeX/ScienceDirect_Data/", "C:/Users/swagj/Documents/GitHub/MTeX/Resized Example/")
 
+#%%
+
 data = MTeX.fetch_df(the_path_in = r"C:\Users\swagj\Documents\GitHub\MTeX\Resized Example")
 
+data_dict = data.to_dict()
+
 data.to_csv(r"C:\Users\swagj\Documents\GitHub\MTeX\SD_Data.csv")
+
+print(type(data.data[0]), type(data.data[2000]), type(data.data[0][0]), type(data.data[2000][0]))
+
+#%%
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn import metrics
+from sklearn.metrics import confusion_matrix
+
+#%%
+
+Xtrain, Xtest, ytrain, ytest = train_test_split(data_dict['data'], data_dict['target'],
+                                                random_state=0)
+model = RandomForestClassifier(n_estimators=1000)
+model.fit(Xtrain, ytrain)
+ypred = model.predict(Xtest)
+print(metrics.classification_report(ypred, ytest))
+
+#%%
