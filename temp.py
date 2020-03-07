@@ -11,7 +11,8 @@ import matplotlib.image as img
 import numpy as np
 from PIL import Image
 from sklearn.datasets import load_digits
-import scipy.io as sio
+#import scipy.io as sio
+
 
 class MTeX(object):
     
@@ -110,3 +111,13 @@ ypred = model.predict(Xtest)
 print(metrics.classification_report(ypred, ytest))
 
 #%%
+
+filter = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
+ 
+ap = argparse.ArgumentParser()
+ap.add_argument("-i", "--image", required=True, help="Path to the image")
+args = vars(ap.parse_args())
+ 
+image = img.imread(args["image"])
+image = gaussian_blur(image, 9, verbose=True)
+MTeX.sobel_edge_detection(image, filter, verbose=True)
