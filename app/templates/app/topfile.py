@@ -13,7 +13,7 @@ from Documents.GitHub.MTeX.app.templates.app.classobj import MTeX
 
 #%%
 
-MTeX = MTeX(r"C:\Users\swagj\Documents\GitHub\MTeX\test\IMG_0154.JPG")
+MTeX = MTeX(r"C:/Users/swagj/Documents/GitHub/MTeX/test/easy_test.jpg")
 
 #%%
 
@@ -70,6 +70,7 @@ plt.ylabel('predicted label');
 
 plt.show(block = False)
 hm.get_figure().savefig(r"C:\Users\swagj\Documents\GitHub\MTeX\heatmap.png")
+print(result)
 
 #%%
 files = os.listdir("C:/Users/swagj/Documents/GitHub/MTeX/resize_contour/")
