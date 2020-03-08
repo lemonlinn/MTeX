@@ -183,9 +183,9 @@ hm.get_figure().savefig(r"C:\Users\swagj\Documents\GitHub\MTeX\heatmap.png")
 
 #%%
 
-MTeX.prepro(r"C:/Users/swagj/Documents/GitHub/MTeX/IMG_0154.JPG", folder = "test_contour")
+#MTeX.prepro(r"C:\Users\swagj\Documents\GitHub\MTeX\test\IMG_2706.JPG", folder = "test_contour")
 
-MTeX.contour_resize("C:/Users/swagj/Documents/GitHub/MTeX/test_contour", "C:/Users/swagj/Documents/GitHub/MTeX/resize_contour")
+MTeX.contour_resize("C:/Users/swagj/Documents/GitHub/MTeX/test", "C:/Users/swagj/Documents/GitHub/MTeX/resize_contour")
 
 contour_df = MTeX.fetch_contour(r'C:\Users\swagj\Documents\GitHub\MTeX\resize_contour')
 
