@@ -13,13 +13,13 @@ import os
 
 app = Flask(__name__)
 
-MTeX = MTeX(r'C:\Users\swagj\Documents\GitHub\MTeX\test\IMG_0154.JPG')
+MTeX = MTeX('')
 
 MTeX.get_img("./ScienceDirect_Data/", "./Resized Example/")
 data = MTeX.fetch_df(the_path_in = r".\Resized Example")
 modelGrid = MTeX.ML_Call(data)
 
-@app.route('/')
+@app.route('/', methods = ['GET','POST'])
 def index():
     return render_template("index.html")
     
