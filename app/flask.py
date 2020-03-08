@@ -15,8 +15,8 @@ app = Flask(__name__)
 
 MTeX = MTeX()
 
-MTeX.get_img("C:/Users/swagj/Documents/GitHub/MTeX/ScienceDirect_Data/", "C:/Users/swagj/Documents/GitHub/MTeX/Resized Example/")
-data = MTeX.fetch_df(the_path_in = r"C:\Users\swagj\Documents\GitHub\MTeX\Resized Example")
+MTeX.get_img("./Documents/GitHub/MTeX/ScienceDirect_Data/", "./Documents/GitHub/MTeX/Resized Example/")
+data = MTeX.fetch_df(the_path_in = r".\Documents\GitHub\MTeX\Resized Example")
 modelGrid = MTeX.ML_Call(data)
 
 @app.route('/')
@@ -30,16 +30,16 @@ def inputs():
             image = request.files.get('image', '')
             MTeXpred = MTeX(image)
             MTeXpred.prepro(folder = "test_contour")
-            MTeXpred.contour_resize("C:/Users/swagj/Documents/GitHub/MTeX/test_contour", "C:/Users/swagj/Documents/GitHub/MTeX/resize_contour")
-            contour_df = MTeXpred.fetch_contour(r'C:\Users\swagj\Documents\GitHub\MTeX\resize_contour')
+            MTeXpred.contour_resize("./Documents/GitHub/MTeX/test_contour", "C:/Users/swagj/Documents/GitHub/MTeX/resize_contour")
+            contour_df = MTeXpred.fetch_contour(r'.\Documents\GitHub\MTeX\resize_contour')
             result = (modelGrid.predict(contour_df))
             my_json = json.dumps({"prediction":result.tolist()})
-            files = os.listdir("C:/Users/swagj/Documents/GitHub/MTeX/resize_contour/")
+            files = os.listdir("./Documents/GitHub/MTeX/resize_contour/")
             for f in files:
-                os.remove("C:/Users/swagj/Documents/GitHub/MTeX/resize_contour/" + f)
-            files = os.listdir("C:/Users/swagj/Documents/GitHub/MTeX/test_contour/")
+                os.remove("./Documents/GitHub/MTeX/resize_contour/" + f)
+            files = os.listdir("./Documents/GitHub/MTeX/test_contour/")
             for f in files:
-                os.remove("C:/Users/swagj/Documents/GitHub/MTeX/test_contour/" + f)
+                os.remove("./Documents/GitHub/MTeX/test_contour/" + f)
             
         return render_template("index.html", info = my_json)
     return render_template("index.html", info = my_json)
