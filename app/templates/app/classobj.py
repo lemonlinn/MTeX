@@ -29,7 +29,6 @@ class MTeX(object):
                                                 random_state=0)
         #model = RandomForestClassifier(n_estimators=1000)
         #model.fit(Xtrain, ytrain)
-        #ypred = model.predict(Xtest)
         #accuracy = metrics.classification_report(ypred, ytest))
         param_grid = {"max_depth": [10, 50, 100],
               "n_estimators": [16, 32, 64],
@@ -39,12 +38,13 @@ class MTeX(object):
 
         grid.fit(Xtrain, ytrain)
 
-        #print("best mean cross-validation score: {:.3f}".format(grid.best_score_))
-        #print("best parameters: {}".format(grid.best_params_))
-        #print("test-set score (accuracy): {:.3f}".format(grid.score(Xtest, ytest)))
+        print("best mean cross-validation score: {:.3f}".format(grid.best_score_))
+        print("best parameters: {}".format(grid.best_params_))
+        print("test-set score (accuracy): {:.3f}".format(grid.score(Xtest, ytest)))
 
         modelGrid = RandomForestClassifier(**grid.best_params_).fit(Xtrain, ytrain)
-        return(modelGrid)
+        ypred = modelGrid.predict(Xtest)
+        return(modelGrid, ytest, ypred)
     
     def get_img(self, in_path, out_path):
         in_path = os.path.abspath(in_path)

@@ -5,23 +5,11 @@ Created on Sun Mar  8 08:56:06 2020
 @author: swagj
 """
 
-#import pandas as pd
-#import os
-#import matplotlib.pyplot as plt
-#import matplotlib.image as img
-#import numpy as np
-#from PIL import Image
-#from sklearn.datasets import load_digits
-#import seaborn as sns; sns.set()
-#import cv2 as cv
-#import math
-#from sklearn.ensemble import RandomForestClassifier
-#from sklearn.model_selection import train_test_split, GridSearchCV
-#from sklearn import metrics
-#from sklearn.metrics import confusion_matrix
-from Documents.GitHub.MTeX.app.templates.app.classobj import MTeX
 import os
-import json
+import matplotlib.pyplot as plt
+import seaborn as sns; sns.set()
+from sklearn.metrics import confusion_matrix
+from Documents.GitHub.MTeX.app.templates.app.classobj import MTeX
 
 #%%
 
@@ -35,7 +23,7 @@ MTeX.get_img("C:/Users/swagj/Documents/GitHub/MTeX/ScienceDirect_Data/", "C:/Use
 
 data = MTeX.fetch_df(the_path_in = r"C:\Users\swagj\Documents\GitHub\MTeX\Resized Example")
 
-modelGrid = MTeX.ML_Call(data)
+modelGrid, ytest, ypred = MTeX.ML_Call(data)
 
 #%%
 
@@ -59,13 +47,7 @@ modelGrid = MTeX.ML_Call(data)
 
 #modelGrid = RandomForestClassifier(**grid.best_params_).fit(Xtrain, ytrain)
 
-#mat = confusion_matrix(ytest, ypred)
-#hm = sns.heatmap(mat.T, square=True, annot=True, fmt='d', cbar=False)
-#plt.xlabel('true label')
-#plt.ylabel('predicted label');
 
-#plt.show(block = False)
-#hm.get_figure().savefig(r"C:\Users\swagj\Documents\GitHub\MTeX\heatmap.png")
 
 #%%
 
@@ -76,9 +58,18 @@ MTeX.contour_resize("C:/Users/swagj/Documents/GitHub/MTeX/test_contour", "C:/Use
 contour_df = MTeX.fetch_contour(r'C:\Users\swagj\Documents\GitHub\MTeX\resize_contour')
 
 #%%
+
 result = (modelGrid.predict(contour_df))
 
-my_json = json.dumps({"prediction":result.tolist()})
+#my_json = json.dumps({"prediction":result.tolist()})
+
+mat = confusion_matrix(ytest, ypred)
+hm = sns.heatmap(mat.T, square=True, annot=True, fmt='d', cbar=False)
+plt.xlabel('true label')
+plt.ylabel('predicted label');
+
+plt.show(block = False)
+hm.get_figure().savefig(r"C:\Users\swagj\Documents\GitHub\MTeX\heatmap.png")
 
 #%%
 files = os.listdir("C:/Users/swagj/Documents/GitHub/MTeX/resize_contour/")
@@ -89,3 +80,5 @@ for f in files:
 files = os.listdir("C:/Users/swagj/Documents/GitHub/MTeX/test_contour/")
 for f in files:
     os.remove("C:/Users/swagj/Documents/GitHub/MTeX/test_contour/" + f)
+
+
