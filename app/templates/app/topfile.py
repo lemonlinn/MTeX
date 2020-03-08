@@ -19,11 +19,14 @@ Created on Sun Mar  8 08:56:06 2020
 #from sklearn.model_selection import train_test_split, GridSearchCV
 #from sklearn import metrics
 #from sklearn.metrics import confusion_matrix
-import Documents.GitHub.MTeX.Backend.classobj.MTeX
+from Documents.GitHub.MTeX.app.templates.app.classobj import MTeX
+import glob
+import os
+import json
 
 #%%
 
-MTeX = MTeX('[IMG HERE]')
+MTeX = MTeX(r"C:\Users\swagj\Documents\GitHub\MTeX\test\IMG_0154.JPG")
 
 #%%
 
@@ -69,9 +72,21 @@ modelGrid = MTeX.ML_Call(data)
 
 MTeX.prepro(folder = "test_contour")
 
-MTeX.contour_resize("C:/Users/swagj/Documents/GitHub/MTeX/test", "C:/Users/swagj/Documents/GitHub/MTeX/resize_contour")
+MTeX.contour_resize("C:/Users/swagj/Documents/GitHub/MTeX/test_contour", "C:/Users/swagj/Documents/GitHub/MTeX/resize_contour")
 
 contour_df = MTeX.fetch_contour(r'C:\Users\swagj\Documents\GitHub\MTeX\resize_contour')
 
 #%%
 result = (modelGrid.predict(contour_df))
+
+my_json = json.dumps({"prediction":result.tolist()})
+
+#%%
+files = os.listdir("C:/Users/swagj/Documents/GitHub/MTeX/resize_contour/")
+for f in files:
+    os.remove("C:/Users/swagj/Documents/GitHub/MTeX/resize_contour/" + f)
+  
+#%%
+files = os.listdir("C:/Users/swagj/Documents/GitHub/MTeX/test_contour/")
+for f in files:
+    os.remove("C:/Users/swagj/Documents/GitHub/MTeX/test_contour/" + f)
