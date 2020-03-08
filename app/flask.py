@@ -6,7 +6,7 @@ Created on Sun Mar  8 08:54:10 2020
 """
 
 from flask import Flask, request, render_template
-import MTeX
+from Documents.GitHub.MTeX.app.templates.app.classobj import MTeX
 import json
 import os
 
