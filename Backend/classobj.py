@@ -18,6 +18,32 @@ import math
 
 class MTeX(object):
     
+    def __init__(self, user_input):
+        self.user_input = user_input
+    
+    def ML_Call(self, data):
+        data_dict = data.to_dict()
+        Xtrain, Xtest, ytrain, ytest = train_test_split(data_dict['data'], data_dict['target'],
+                                                random_state=0)
+        #model = RandomForestClassifier(n_estimators=1000)
+        #model.fit(Xtrain, ytrain)
+        #ypred = model.predict(Xtest)
+        #accuracy = metrics.classification_report(ypred, ytest))
+        param_grid = {"max_depth": [10, 50, 100],
+              "n_estimators": [16, 32, 64],
+              "random_state": [1234]}
+
+        grid = GridSearchCV(RandomForestClassifier(), param_grid=param_grid, cv=10)
+
+        grid.fit(Xtrain, ytrain)
+
+        #print("best mean cross-validation score: {:.3f}".format(grid.best_score_))
+        #print("best parameters: {}".format(grid.best_params_))
+        #print("test-set score (accuracy): {:.3f}".format(grid.score(Xtest, ytest)))
+
+        modelGrid = RandomForestClassifier(**grid.best_params_).fit(Xtrain, ytrain)
+        return(modelGrid)
+    
     def get_img(self, in_path, out_path):
         in_path = os.path.abspath(in_path)
         the_dirs = os.listdir(in_path)
@@ -101,8 +127,8 @@ class MTeX(object):
 
         return(temp)
     
-    def prepro(self, img_file, folder):
-        img = cv.imread(img_file) 
+    def prepro(self, folder):
+        img = cv.imread(self.user_input) 
         threshold = 100
 
         src_gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
