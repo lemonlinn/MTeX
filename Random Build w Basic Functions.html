@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<title>M.TeX</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<style>
+/* Style the body */
+body {
+  text-align: center;
+  font-family: 'Sarala', sans-serif; 
+  font-family: 'Roboto Mono', monospace; font-size: 20px;
+  margin: 0;
+ }
+
+/* Header/Logo Title */
+.header {
+  padding: 10px;
+  padding-top: 50px;
+  text-align: center;
+  background: #240D38;
+  color: white;
+  font-size: 30px;
+}
+
+/* Page Content */
+.content {padding:20px;}
+
+.flex-containter {
+	display: flex;
+	justify-content: center;
+  	background-color: #EEEEEF;
+}
+
+.flex-container > div {
+  background-color: #FAFAFF;
+  justify-content: center;
+  width: 100px;
+  margin: 10px;
+  text-align: center;
+  alignment-baseline: 3;
+  line-height: 75px;
+  font-size: 30px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Create three equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 30px;
+  height: 300px; /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  grid-gap: 100px;
+  background-color: #240D38;
+  padding: 40px;
+  width: 1300px;
+  height: 1000px;
+}
+
+.grid-container > div {
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 1px solid black;
+  text-align: center;
+  font-size: 30px;
+  width: 550px;
+  height: 500px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  justify-content: center;
+}
+
+.output {
+	display: grid;
+  	grid-template-rows: auto auto auto auto;
+  	grid-gap: px;
+ 	background-color: #240D38;
+  	padding: 0px;
+  	width: 550px;
+  	height:250px;
+ }
+
+ .output >div {
+ 	background-color: rgba(255, 255, 255, 0.95);
+  border: 0px solid black;
+  text-align: center;
+  font-size: 30px;
+  width: 550px;
+  height: 500px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-bottom: 0px;
+  justify-content: center;
+}
+
+.leftCol {
+float: left;
+width: 40%;
+background-color: #DCABFE;
+height: 60px;
+}
+.rightColContainer {
+float: left;
+width: 50%;background-color: #240D38;
+
+}
+.rightCol1 {
+background-color: #333;
+height: 30px;
+background-color: #ABCDEF;
+}
+.rightCol2 {
+background-color: #777;
+height: 30px;
+background-color: #DEFABC;
+}
+
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <img src="Logo jpeg.jpg" alt="M.TeX" align="center" width = 15% height = 15%>
+  <!div class ="seperator" style ="padding-bottom: 20px"---><!/div-->
+  <link href="https://fonts.googleapis.com/css?family=Sarala&display=swap" rel="stylesheet"><h4>DIGITIZE YOUR MATH</h4>	
+</div>
+
+
+<div class="row">
+  <div class="column" style="background-color:#FFFFFF;" >
+    <img src = "handwritten.jpeg" ALT="M.TeX" align="middle" align="center" width = 100% height = 100%  >
+  </div>
+  <div class="column" style="background-color:#FFFFFF;">
+    <img src = "math.jpeg" ALT="M.TeX" align="middle" width = 100% height = 77% style =" padding-top: 50px" >
+  </div>
+  <div class="column" style="background-color:#FFFFFF; align-text: center; padding-top:100px; padding-bottom:15px" >
+    <!img src = "IMG_3730.JPG" ALT="M.TeX" align="middle" width = 100% height = 100%-->
+   <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet">\lim _{x\rightarrow a}\dfrac {f\left( x\right) -f\left( \sin a\right) }{\sqrt {x}-a}
+  </div>
+  
+</div>
+ <div class ="seperator" style = "padding-bottom: 100px">
+  </div>
+
+<div class="button" style = "text-align: center">
+  <button type="button" style = "border-radius: 25px; background-color: #240D38;width: 20%;
+margin-left: 40%;margin-right: 40%; font-family: Sarala; font-style: normal;font-weight: normal; font-size: 16px; color: #FFFFFF ;line-height: 50px; text-align: right; display: flex; display: flex;"> DIGITIZE MY MATH
+  </button>
+
+ <div class = "seperator" style ="background-color: #FFFFFF; height: 100px">
+ </div>
+
+ <div class="row" style="background-color:#FACDE8;">
+	  <div class="col-md-6">
+	      <form method="post" action="#" id="#">
+              
+              
+              <div class="form-group files">
+                <label>Upload Your File </label>
+                <input type="file" class="form-control" multiple="">
+              </div>
+              
+            
+          </form>
+	      
+	      
+	  </div>
+	   <div class="col-md-6">
+	      <form method="post" action="#" id="#">
+           
+              
+              
+              
+              <div class="form-group files color">
+                <label>Upload Your File </label>
+                <input type="file" class="form-control" multiple="">
+              </div>
+              
+            
+          </form>
+	      
+	      
+	  </div>
+	</div>
+</div>
+ <div class="leftCol">columncontent1</div>
+ <div class="container">
+    <div class="rightColContainer">
+        <div class="rightCol1" style = "padding: 50px">columncontent2</div>
+        <div class="rightCol2">columncontent3</div>
+    </div>
+</div>
+</div>
+
+
+
+
+</body>
+</html>
