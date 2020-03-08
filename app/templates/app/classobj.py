@@ -48,6 +48,7 @@ class MTeX(object):
     
     def get_img(self, in_path, out_path):
         in_path = os.path.abspath(in_path)
+        out_path = os.path.abspath(out_path)
         the_dirs = os.listdir(in_path)
         out_files = os.listdir(out_path)
         for in_name, out_name in zip(the_dirs, out_files):
@@ -59,6 +60,7 @@ class MTeX(object):
                 
     def contour_resize(self, in_path, out_path):
         in_path = os.path.abspath(in_path)
+        out_path = os.path.abspath(out_path)
         the_dirs = os.listdir(in_path)
         for word in the_dirs:
             img = Image.open(in_path + '/' + word)

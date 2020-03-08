@@ -30,7 +30,8 @@ def inputs():
             image = request.files.get('image', '')
             MTeXpred = MTeX(image)
             MTeXpred.prepro(folder = "test_contour")
-            MTeXpred.contour_resize("./Documents/GitHub/MTeX/test_contour", "C:/Users/swagj/Documents/GitHub/MTeX/resize_contour")
+            MTeXpred.contour_resize("./Documents/GitHub/MTeX/test_contour", 
+                                    "./Documents/GitHub/MTeX/resize_contour")
             contour_df = MTeXpred.fetch_contour(r'.\Documents\GitHub\MTeX\resize_contour')
             result = (modelGrid.predict(contour_df))
             my_json = json.dumps({"prediction":result.tolist()})

@@ -20,7 +20,6 @@ Created on Sun Mar  8 08:56:06 2020
 #from sklearn import metrics
 #from sklearn.metrics import confusion_matrix
 from Documents.GitHub.MTeX.app.templates.app.classobj import MTeX
-import glob
 import os
 import json
 
