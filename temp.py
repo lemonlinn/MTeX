@@ -120,7 +120,7 @@ class MTeX(object):
                 cv.drawContours(clone, contours, i, (0,0,0), cv.FILLED)
                 [x, y, w, h] = cv.boundingRect(contours[i])
                 crop_img = clone[int(math.floor(y-h*0.5)):y+h*2, int(math.floor(x-w*0.5)):x+w*2]
-                cv.imwrite("./{}/contour{}.jpg".format(folder, i), crop_img)
+                cv.imwrite("C:/Users/swagj/Documents/GitHub/MTeX/{}/contour{}.jpg".format(folder, i), crop_img)
 
         cv.waitKey(0)
         
@@ -183,9 +183,9 @@ hm.get_figure().savefig(r"C:\Users\swagj\Documents\GitHub\MTeX\heatmap.png")
 
 #%%
 
-MTeX.prepro(r"C:\Users\swagj\Documents\GitHub\MTeX\IMG_0154.JPG", folder = "test_contour")
+MTeX.prepro(r"C:/Users/swagj/Documents/GitHub/MTeX/IMG_0154.JPG", folder = "test_contour")
 
-MTeX.contour_resize("C:/Users/swagj/Documents/GitHub/MTeX/test_contour/", "C:/Users/swagj/Documents/GitHub/MTeX/resize_contour/")
+MTeX.contour_resize("C:/Users/swagj/Documents/GitHub/MTeX/test_contour", "C:/Users/swagj/Documents/GitHub/MTeX/resize_contour")
 
 contour_df = MTeX.fetch_contour(r'C:\Users\swagj\Documents\GitHub\MTeX\resize_contour')
 
