@@ -7,6 +7,7 @@ Created on Sun Mar  8 08:54:10 2020
 
 from flask import Flask, request, render_template
 import MTeX
+import json
 
 app = Flask(__name__)
 
@@ -25,9 +26,10 @@ def index():
             MTeXpred.contour_resize("C:/Users/swagj/Documents/GitHub/MTeX/test", "C:/Users/swagj/Documents/GitHub/MTeX/resize_contour")
             contour_df = MTeXpred.fetch_contour(r'C:\Users\swagj\Documents\GitHub\MTeX\resize_contour')
             result = (modelGrid.predict(contour_df))
+            my_json = json.dump({"prediction":result})
             
-        return render_template("index.html", info = result)
-    return render_template("index.html", info = result)
+        return render_template("index.html", info = my_json)
+    return render_template("index.html", info = my_json)
 
 if __name__ == '__main__':
     app.run(port = 5000, debug = True)
